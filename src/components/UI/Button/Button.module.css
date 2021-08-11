@@ -1,0 +1,12 @@
+.controlButton{
+    cursor: pointer;
+    width: 37px;
+    height: 30px;
+    margin: 0px 20px;
+    background: left;
+    padding: 0px 0;
+    padding-bottom: 32px;
+    color: beige;
+    font-size: large;
+}
+
