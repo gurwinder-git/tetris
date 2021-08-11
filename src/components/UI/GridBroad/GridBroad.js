@@ -9,7 +9,7 @@ function GridBroad() {
     for (let row = 0; row < 18; row++) {
         gridBoard.push([])
         for (let col = 0; col < 10; col++) {
-            gridBoard[row].push(<GridSquare key={`${col}${row}`} colorNumber='0' />)
+            gridBoard[row].push(<GridSquare key={`${col}${row}`} colorNumber='6' />)
         }
     }
 

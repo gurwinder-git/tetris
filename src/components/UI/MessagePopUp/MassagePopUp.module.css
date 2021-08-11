@@ -1,0 +1,17 @@
+.massagePopUp {
+    height: 50%;
+    width: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    display: flex;
+    background-color: #000000e8;
+    align-items: center;
+    justify-content: center;
+}
+
+.massagePopUp h3 {
+    text-align: center;
+    color: aliceblue;
+    font-size: xx-large;
+}

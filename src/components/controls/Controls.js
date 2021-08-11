@@ -22,7 +22,6 @@ function Controls() {
                 </div>
                 <Button arrow='down' />
             </div>
-
         </div>
     )
 }
