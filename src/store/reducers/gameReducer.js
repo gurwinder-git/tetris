@@ -1,6 +1,7 @@
 import * as actionType from '../actionTypes/actionTypes'
+import { defaultState } from '../../utils/utils'
 
-const initialState = {}
+const initialState = defaultState()
 
 const gameReducer = (state = initialState, action) => {
     switch (action.type) {
