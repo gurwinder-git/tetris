@@ -1,0 +1,16 @@
+#grid {
+    display: grid;
+    grid-template-columns: repeat(10, 33px);
+    width: 330px;
+    /* display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; */
+}
+
+#grid span {
+    height: 33px;
+    width: 33px;
+    border: 1px solid black;
+}
+
+.first {}
