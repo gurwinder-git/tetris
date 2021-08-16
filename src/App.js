@@ -27,6 +27,25 @@ class App extends Component {
 
     componentDidMount() {
         this.initGame()
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.keyCode) {
+                case 39:
+                    this.pieceMoveToXAxis(1)
+                    break;
+
+                case 37:
+                    this.pieceMoveToXAxis(-1)
+                    break;
+
+                case 40:
+                    this.pieceMoveToYAxis(1)
+                    break;
+
+                default:
+                    break;
+            }
+        })
     }
 
     buildGrid = () => {
@@ -51,14 +70,17 @@ class App extends Component {
         piece.grid = pieceCollection[0]
         piece.mergeData = []
 
-        const result = this.pieceCanBeMove(piece)
+        const coordinates = this.pieceCanBeMove(piece)
 
-        if (result) {
+        if (coordinates !== false) {
+            piece.mergeData = coordinates
             this.setState({ piece })
         }
     }
 
     pieceCanBeMove = (piece) => {
+
+        const coordinates = []
 
         for (let y = 0; y < piece.grid.length; y++) { //row
             for (let x = 0; x < piece.grid[0].length; x++) { //col
@@ -70,19 +92,77 @@ class App extends Component {
                     // console.log('row', y + piece.posY)
                     // console.log('col', x + piece.posX)
                     // console.log(this.state.grid[y + piece.posY][x + piece.posX])
+
+                    if (this.state.grid[y + piece.posY] === undefined) return false
+
+                    if (this.state.grid[y + piece.posY][x + piece.posX] === undefined) return false
+
+
                     if (this.state.grid[y + piece.posY][x + piece.posX] > 0) {
                         return false
                     }
 
-                    piece.mergeData.push(y + '_' + x)
+                    coordinates.push((y + piece.posY) + '_' + (x + piece.posX))
                 }
             }
         }
-        return true
+        return coordinates
+    }
+
+    pieceMoveToXAxis = (deltaX) => {
+        const piece = { ...this.state.piece }
+
+        if (piece === null) {
+            return false
+        }
+
+        piece.posX += deltaX
+
+        const coordinates = this.pieceCanBeMove(piece)
+
+        if (coordinates) {
+            piece.mergeData = coordinates
+            // console.log(coordinates)
+            this.setState({ piece })
+        }
+    }
+
+    pieceMoveToYAxis = (deltaY) => {
+        const piece = { ...this.state.piece }
+
+        if (piece === null) {
+            return false
+        }
+
+        piece.posY += deltaY
+
+        const coordinates = this.pieceCanBeMove(piece)
+
+        if (coordinates) {
+            piece.mergeData = coordinates
+            // console.log(coordinates)
+            this.setState({ piece })
+        } else {
+            this.mergePieceToGrid()
+        }
+    }
+
+    mergePieceToGrid = () => {
+        const virtualGrid = this.state.grid
+
+        this.state.piece.mergeData.forEach(item => {
+            const [y, x] = item.split('_')
+            virtualGrid[+y][+x] = 1
+        })
+
+        this.setState({ grid: virtualGrid, piece: null }, () => {
+            this.generatePiece()
+        })
+
+
     }
 
     render() {
-
         return (
             <div id="tetris-container">
                 {

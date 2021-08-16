@@ -8,13 +8,32 @@ function Grid({ grid, piece }) {
         <div id={css.grid}>
             {
                 grid.map((line, y) => {
+
                     return line.map((col, x) => {
-                        return (<span key={`${y}${x}`} className={x === 0 ? css.first : ''}>
-                            {
-                                piece ? piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
-                                    grid[y][x]
+
+                        const classes = []
+                        if (x === 0) {
+                            classes.push(css.first)
+                        }
+
+                        if (piece) {
+                            if (piece.mergeData.indexOf(y + '_' + x) !== -1) {
+                                classes.push(css.color)
                             }
-                        </span>)
+                        }
+                        if (grid[y][x] > 0) {
+                            classes.push(css.color)
+                        }
+
+                        return (
+                            <span key={`${y}${x}`} className={classes.join(' ')}>
+                                {
+                                    piece ?
+                                        piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
+                                        grid[y][x]
+                                }
+                            </span>
+                        )
                     })
                 })
             }
