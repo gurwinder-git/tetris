@@ -12,25 +12,31 @@ function Grid({ grid, piece }) {
                     return line.map((col, x) => {
 
                         const classes = []
+                        let textContent
                         if (x === 0) {
                             classes.push(css.first)
                         }
 
                         if (piece) {
+                            // console.log(piece)
                             if (piece.mergeData.indexOf(y + '_' + x) !== -1) {
                                 classes.push(css.color)
+                                textContent = piece.color
                             }
                         }
                         if (grid[y][x] > 0) {
                             classes.push(css.color)
+                            textContent = grid[y][x]
                         }
 
                         return (
-                            <span key={`${y}${x}`} className={classes.join(' ')}>
+                            <span key={`${y}_${x}`} className={classes.join(' ')}>
                                 {
-                                    piece ?
-                                        piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
-                                        grid[y][x]
+                                    textContent
+                                    // piece ?
+                                    //     piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
+                                    //     grid[y][x]
+
                                 }
                             </span>
                         )

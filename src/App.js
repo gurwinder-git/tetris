@@ -42,6 +42,14 @@ class App extends Component {
                     this.pieceMoveToYAxis(1)
                     break;
 
+                case 88:
+                    this.rotatePieceToRight()
+                    break;
+
+                case 89:
+                    this.rotatePieceToLeft()
+                    break;
+
                 default:
                     break;
             }
@@ -69,12 +77,15 @@ class App extends Component {
         piece.posX = 0
         piece.grid = pieceCollection[0]
         piece.mergeData = []
+        piece.color = Math.trunc(Math.random() * 5) + 1
 
         const coordinates = this.pieceCanBeMove(piece)
 
         if (coordinates !== false) {
             piece.mergeData = coordinates
             this.setState({ piece })
+        } else {
+            console.log('game over')
         }
     }
 
@@ -152,13 +163,43 @@ class App extends Component {
 
         this.state.piece.mergeData.forEach(item => {
             const [y, x] = item.split('_')
-            virtualGrid[+y][+x] = 1
+            virtualGrid[+y][+x] = this.state.piece.color
         })
 
         this.setState({ grid: virtualGrid, piece: null }, () => {
             this.generatePiece()
         })
+    }
 
+    rotatePieceToRight = () => {
+        const piece = { ...this.state.piece }
+        // console.log(piece)
+
+        if (piece === null) return false
+
+        let rotatedGrid = []
+
+        for (let x = 0; x < piece.grid[0].length; x++) {
+            const line = []
+            for (let y = piece.grid.length - 1; y > -1; y--) {
+                // console.log(y + '_' + x, '=>', piece.grid[y][x])
+                line.push(piece.grid[y][x])
+            }
+            rotatedGrid.push(line)
+        }
+
+        piece.grid = rotatedGrid
+
+        const coordinates = this.pieceCanBeMove(piece)
+
+        if (coordinates) {
+            piece.mergeData = coordinates
+            this.setState({ piece })
+        } else {
+        }
+    }
+
+    rotatePieceToLeft = () => {
 
     }
 
