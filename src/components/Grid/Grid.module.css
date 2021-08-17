@@ -5,22 +5,22 @@
     /* display: flex;
     flex-direction: row;
     flex-wrap: wrap; */
+    grid-row-gap: 1px;
+    grid-column-gap: 1px;
 }
 
 #grid span {
     height: 33px;
     width: 33px;
+    text-align: center;
     border: 1px solid black;
 }
 
-.first {}
+.first {
+    color: ''
+}
 
 .color {
     background: #000;
     color: white
 }
-
-/* .grid_color {
-    background: #000;
-    color: white
-} */

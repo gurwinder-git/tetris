@@ -16,38 +16,75 @@ class App extends Component {
             grid: null,
             gridHeight: 18,
             gridWidth: 10,
-            piece: null
+            piece: null,
+            clearLines: 0,
+            level: 1
         }
         // this.buildGrid.bind(this)
     }
 
     initGame = () => {
-        this.setState({ grid: this.buildGrid() }, this.generatePiece)
+        this.setState({ grid: this.buildGrid() }, () => {
+            this.generatePiece()
+            this.setTimer()
+        })
+    }
+
+    setTimer = () => {
+        this.timerID = setInterval(() => {
+            if (this.state.piece) {
+                this.pieceMoveToYAxis(1)
+            }
+        }, this.levelToTime(this.state.level))
+    }
+
+    levelToTime = (level) => {
+        switch (level) {
+            case 1:
+                return 1000
+
+            case 2:
+                return 500
+
+            default:
+                return 500
+        }
     }
 
     componentDidMount() {
         this.initGame()
 
         document.addEventListener('keydown', (event) => {
+            // console.log(event.keyCode)
             switch (event.keyCode) {
                 case 39:
-                    this.pieceMoveToXAxis(1)
+                    if (this.state.piece) {
+                        this.pieceMoveToXAxis(1)
+                    }
                     break;
 
                 case 37:
-                    this.pieceMoveToXAxis(-1)
+                    if (this.state.piece) {
+                        this.pieceMoveToXAxis(-1)
+                    }
                     break;
 
                 case 40:
-                    this.pieceMoveToYAxis(1)
+                    if (this.state.piece) {
+                        this.pieceMoveToYAxis(1)
+                    }
                     break;
 
                 case 88:
-                    this.rotatePieceToRight()
+                    if (this.state.piece) {
+                        this.rotatePiece('right')
+                    }
                     break;
 
-                case 89:
-                    this.rotatePieceToLeft()
+                case 90:
+                    if (this.state.piece) {
+                        this.rotatePiece('left')
+                    }
                     break;
 
                 default:
@@ -70,22 +107,31 @@ class App extends Component {
         return grid
     }
 
+    closeGame = () => {
+        console.log('game over')
+        clearInterval(this.timerID)
+    }
+
     //Get piece
     generatePiece = () => {
         const piece = {}
         piece.posY = 0
         piece.posX = 0
-        piece.grid = pieceCollection[0]
+        piece.grid = pieceCollection[Math.trunc(Math.random() * 7)]
         piece.mergeData = []
         piece.color = Math.trunc(Math.random() * 5) + 1
 
+        piece.posX = Math.floor((this.state.gridWidth - piece.grid[0].length) / 2)
+
+
+
         const coordinates = this.pieceCanBeMove(piece)
 
-        if (coordinates !== false) {
+        if (coordinates) {
             piece.mergeData = coordinates
             this.setState({ piece })
         } else {
-            console.log('game over')
+            this.closeGame()
         }
     }
 
@@ -141,7 +187,7 @@ class App extends Component {
     pieceMoveToYAxis = (deltaY) => {
         const piece = { ...this.state.piece }
 
-        if (piece === null) {
+        if (!piece) {
             return false
         }
 
@@ -166,12 +212,26 @@ class App extends Component {
             virtualGrid[+y][+x] = this.state.piece.color
         })
 
-        this.setState({ grid: virtualGrid, piece: null }, () => {
+        const { clearLines, cleanGrid } = this.cleanGridLine(virtualGrid)
+
+
+        this.setState((pre) => {
+            return {
+                grid: cleanGrid,
+                piece: null,
+                clearLines: pre.clearLines + clearLines
+            }
+        }, () => {
             this.generatePiece()
+            if (this.state.clearLines > 2) {
+                clearInterval(this.timerID)
+                this.setTimer(this.state.level++)
+            }
         })
+
     }
 
-    rotatePieceToRight = () => {
+    rotatePiece = (rotation) => {
         const piece = { ...this.state.piece }
         // console.log(piece)
 
@@ -179,33 +239,162 @@ class App extends Component {
 
         let rotatedGrid = []
 
-        for (let x = 0; x < piece.grid[0].length; x++) {
-            const line = []
-            for (let y = piece.grid.length - 1; y > -1; y--) {
-                // console.log(y + '_' + x, '=>', piece.grid[y][x])
-                line.push(piece.grid[y][x])
+        if (rotation === 'right') {
+            for (let x = 0; x < piece.grid[0].length; x++) {
+                const line = []
+                for (let y = piece.grid.length - 1; y > -1; y--) {
+                    // console.log(y + '_' + x, '=>', piece.grid[y][x])
+                    line.push(piece.grid[y][x])
+                }
+                rotatedGrid.push(line)
             }
-            rotatedGrid.push(line)
+        }
+
+        if (rotation === 'left') {
+            for (let x = piece.grid[0].length - 1; x > -1; x--) {
+                const line = []
+                for (let y = 0; y < piece.grid.length; y++) {
+                    line.push(piece.grid[y][x])
+                }
+                rotatedGrid.push(line)
+            }
         }
 
         piece.grid = rotatedGrid
 
-        const coordinates = this.pieceCanBeMove(piece)
+        let coordinates = this.pieceCanBeMove(piece)
 
         if (coordinates) {
             piece.mergeData = coordinates
             this.setState({ piece })
         } else {
+            let isPositionUpdate = false
+            // console.log(piece)
+
+            if (piece.posX < 0) {
+                piece.posX = 0
+                isPositionUpdate = true
+            }
+            else if (piece.grid[0].length + piece.posX > this.state.gridWidth) {
+                // console.log(piece.grid[0].length + piece.posX)
+                piece.posX = this.state.gridWidth - piece.grid[0].length
+                isPositionUpdate = true
+            } else if (piece.posY < 0) {
+                piece.posY = 0
+                isPositionUpdate = true
+            }
+
+            if (isPositionUpdate) {
+                coordinates = this.pieceCanBeMove(piece)
+
+                if (coordinates) {
+                    piece.mergeData = coordinates
+                    this.setState({ piece })
+                }
+            }
         }
+
     }
 
-    rotatePieceToLeft = () => {
+    // rotatePieceToRight = () => {
+    //     const piece = { ...this.state.piece }
+    //     // console.log(piece)
 
+    //     if (piece === null) return false
+
+    //     let rotatedGrid = []
+
+    //     for (let x = 0; x < piece.grid[0].length; x++) {
+    //         const line = []
+    //         for (let y = piece.grid.length - 1; y > -1; y--) {
+    //             // console.log(y + '_' + x, '=>', piece.grid[y][x])
+    //             line.push(piece.grid[y][x])
+    //         }
+    //         rotatedGrid.push(line)
+    //     }
+
+    //     piece.grid = rotatedGrid
+
+    //     const coordinates = this.pieceCanBeMove(piece)
+
+    //     if (coordinates) {
+    //         piece.mergeData = coordinates
+    //         this.setState({ piece })
+    //     } else {
+    //         console.log('you can not rotatez ')
+    //     }
+    // }
+
+    // rotatePieceToLeft = () => {
+
+    //     const piece = { ...this.state.piece }
+
+    //     if (!piece) return false
+
+    //     const rotatedGrid = []
+
+    //     for (let x = piece.grid[0].length - 1; x > -1; x--) {
+    //         const line = []
+    //         for (let y = 0; y < piece.grid.length; y++) {
+    //             line.push(piece.grid[y][x])
+    //         }
+    //         rotatedGrid.push(line)
+    //     }
+
+    //     piece.grid = rotatedGrid
+
+    //     const coordinates = this.pieceCanBeMove(piece)
+
+    //     if (coordinates) {
+    //         piece.mergeData = coordinates
+    //         this.setState({ piece })
+    //     } else {
+    //         console.log('you can not rotatez ')
+    //     }
+    // }
+
+    cleanGridLine = (grid) => {
+
+        const cleanGrid = []
+        let clearLines = 0
+
+        for (let y = 0; y < this.state.gridHeight; y++) {
+            let lineCompleted = true
+            for (let x = 0; x < this.state.gridWidth; x++) {
+
+                if (grid[y][x] === 0) {
+                    lineCompleted = false
+                }
+
+            }
+
+            if (lineCompleted === false) {
+                cleanGrid.push(grid[y])
+            }
+        }
+
+        clearLines = this.state.grid.length - cleanGrid.length
+
+        for (let line = 0; line < clearLines; line++) {
+            cleanGrid.unshift(createLine(this.state.gridWidth))
+        }
+
+        function createLine(width) {
+            const line = []
+            for (let i = 0; i < width; i++) {
+                line.push(0)
+            }
+            return line
+        }
+
+        return { clearLines, cleanGrid }
     }
 
     render() {
         return (
             <div id="tetris-container">
+                <p>Points: <span>{this.state.clearLines}</span></p>
+                <p>level: <span>{this.state.level}</span></p>
                 {
                     this.state.grid ? (<Grid
                         grid={this.state.grid}
@@ -218,3 +407,4 @@ class App extends Component {
 
 
 export default App;
+

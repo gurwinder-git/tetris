@@ -12,7 +12,7 @@ function Grid({ grid, piece }) {
                     return line.map((col, x) => {
 
                         const classes = []
-                        let textContent
+                        let textContent = 0
                         if (x === 0) {
                             classes.push(css.first)
                         }
@@ -24,6 +24,7 @@ function Grid({ grid, piece }) {
                                 textContent = piece.color
                             }
                         }
+
                         if (grid[y][x] > 0) {
                             classes.push(css.color)
                             textContent = grid[y][x]
@@ -36,7 +37,6 @@ function Grid({ grid, piece }) {
                                     // piece ?
                                     //     piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
                                     //     grid[y][x]
-
                                 }
                             </span>
                         )
