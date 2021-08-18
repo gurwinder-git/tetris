@@ -1,19 +1,18 @@
 #grid {
     display: grid;
-    grid-template-columns: repeat(10, 33px);
+    grid-template-columns: repeat(var(--cols), var(--tile-size));
+    margin-right: 8px;
+    background-color: var(--main-color);
     width: 330px;
-    /* display: flex;
-    flex-direction: row;
-    flex-wrap: wrap; */
-    grid-row-gap: 1px;
-    grid-column-gap: 1px;
+    border: 1px solid black;
 }
 
 #grid span {
-    height: 33px;
-    width: 33px;
+    height: var(--tile-size);
+    width: var(--tile-size);
     text-align: center;
-    border: 1px solid black;
+    /* border-bottom: 1px solid rgb(247, 239, 239); */
+    /* border-left: 1px solid rgb(247, 239, 239); */
 }
 
 .first {
@@ -21,10 +20,12 @@
 }
 
 .projection {
-    background-color: #c2c2c2;
+    background-color: #292929;
+    border: 1px solid #171717;
 }
 
 .color {
     background: #000;
-    color: white
+    color: white;
+    border: 1px solid var(--border-color);
 }

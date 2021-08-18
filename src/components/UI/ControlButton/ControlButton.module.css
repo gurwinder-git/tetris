@@ -1,0 +1,17 @@
+.c_button {
+    width: 27px;
+    height: 24px;
+    background: var(--main-color);
+    border-width: 3px;
+    font-size: larger;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: content-box;
+    padding: 0px 3px 9px 6px;
+    cursor: pointer;
+}
+
+.c_button:disabled {
+    background-color: #5d5d5d;
+    cursor: not-allowed;
+}

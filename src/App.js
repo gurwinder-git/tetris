@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import './App.css'
+import css from './App.module.css'
 
 //componets
 import Grid from './components/Grid/Grid'
 import NextPiece from './components/NextPiece/NextPiece'
 import StartGame from './components/StartGame/StartGame'
+import ControlButton from './components/UI/ControlButton/ControlButton'
+import MessagePopUp from './components/UI/MessagePopUp/MessagePopUp'
 
 //pices
 import { pieceCollection } from './pieceCollection/pieceCollection'
@@ -21,7 +23,10 @@ class App extends Component {
             piece: null,
             clearLines: 0,
             nextPieceIndex: null,
-            gameRunning: false
+            gameRunning: false,
+            heighScore: 0,
+            paused: false,
+            gameOver: false
         }
         // this.buildGrid.bind(this)
     }
@@ -31,7 +36,19 @@ class App extends Component {
     }
 
     initGame = () => {
-        this.setState({ grid: this.buildGrid(), nextPieceIndex: this.generateNextPieceIndex() }, () => {
+        if (this.timerID) {
+            clearInterval(this.timerID)
+            // console.log(this.timerID)
+        }
+        this.setState({
+            grid: this.buildGrid(),
+            nextPieceIndex: this.generateNextPieceIndex(),
+            gameRunning: true,
+            paused: false,
+            clearLines: 0,
+            paused: false,
+            gameOver: false
+        }, () => {
             this.generatePiece()
             this.setTimer()
         })
@@ -56,43 +73,44 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.initGame()
 
         document.addEventListener('keydown', (event) => {
-            // console.log(event.keyCode)
-            switch (event.keyCode) {
-                case 39:
-                    if (this.state.piece) {
-                        this.pieceMoveToXAxis(1)
-                    }
-                    break;
+            if (!this.state.paused) {
+                // console.log(event.keyCode)
+                switch (event.keyCode) {
+                    case 39:
+                        if (this.state.piece) {
+                            this.pieceMoveToXAxis(1)
+                        }
+                        break;
 
-                case 37:
-                    if (this.state.piece) {
-                        this.pieceMoveToXAxis(-1)
-                    }
-                    break;
+                    case 37:
+                        if (this.state.piece) {
+                            this.pieceMoveToXAxis(-1)
+                        }
+                        break;
 
-                case 40:
-                    if (this.state.piece) {
-                        this.pieceMoveToYAxis(1)
-                    }
-                    break;
+                    case 40:
+                        if (this.state.piece) {
+                            this.pieceMoveToYAxis(1)
+                        }
+                        break;
 
-                case 88:
-                    if (this.state.piece) {
-                        this.rotatePiece('right')
-                    }
-                    break;
+                    case 88:
+                        if (this.state.piece) {
+                            this.rotatePiece('right')
+                        }
+                        break;
 
-                case 90:
-                    if (this.state.piece) {
-                        this.rotatePiece('left')
-                    }
-                    break;
+                    case 90:
+                        if (this.state.piece) {
+                            this.rotatePiece('left')
+                        }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         })
     }
@@ -112,8 +130,9 @@ class App extends Component {
     }
 
     closeGame = () => {
-        console.log('game over')
+        // console.log('game over')
         clearInterval(this.timerID)
+        this.setState({ gameOver: true })
     }
 
     //Get piece
@@ -402,14 +421,42 @@ class App extends Component {
         return { clearLines, cleanGrid }
     }
 
+    pauseGame = () => {
+        clearInterval(this.timerID)
+        console.log(this.timerID)
+        this.setState({ paused: true })
+    }
+
+    resumeGame = () => {
+        clearInterval(this.timerID)
+        this.setState({ paused: false })
+        this.setTimer()
+    }
+
+    StartGame = () => {
+        this.initGame()
+    }
+
+    restartGame = () => {
+        if (window.confirm('Are you sure')) {
+            clearInterval(this.timerID)
+            this.initGame()
+        }
+    }
+
     render() {
         // console.log(pieceCollection[this.state.nextPieceIndex])
 
         return (
             <>
-                <StartGame />
-                <div id="tetris-container">
-                    <p>Points: <span>{this.state.clearLines}</span></p>
+
+                {!this.state.gameRunning ? <StartGame clicked={this.StartGame} /> : null}
+
+                {this.state.paused || this.state.gameOver ?
+                    <MessagePopUp resumeGame={this.resumeGame} paused={this.state.paused} gameOver={this.state.gameOver} startGame={this.StartGame} /> :
+                    null}
+
+                <div id={css.tetris_container}>
 
                     {
                         this.state.grid ? (<Grid
@@ -417,16 +464,57 @@ class App extends Component {
                             piece={this.state.piece} />) : null
                     }
 
-                    <p>Next Piece</p>
-                    {
-                        this.state.nextPieceIndex ? <NextPiece grid={pieceCollection[this.state.nextPieceIndex]} /> : ''
-                    }
+                    <div className={css.right_div}>
+                        <h2>tetris</h2>
+                        <div className={css.next_piece}>
+                            <p>Next Piece</p>
+                            {
+                                this.state.nextPieceIndex ? <NextPiece grid={pieceCollection[this.state.nextPieceIndex]} /> : ''
+                            }
+                        </div>
+                        <div className={css.scores}>
+                            <p>Clear Lines: <span>{this.state.clearLines}</span></p>
+                        </div>
+
+                        <div className={css.scores}>
+                            <p>High Score: <span>{this.state.heighScore}</span></p>
+                        </div>
+
+                        <div className={css.start_pause}>
+                            <button onClick={this.restartGame}>Restart</button>
+                            <button onClick={this.pauseGame}>Pause</button>
+                        </div>
+
+                        <div className={css.controls}>
+                            <ControlButton disabled={this.state.paused} clicked={() => this.rotatePiece('left')} type="up">up</ControlButton>
+                            <div>
+                                <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToXAxis(-1)} type="left">left</ControlButton>
+                                <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToXAxis(1)} type="right">Right</ControlButton>
+                            </div>
+                            <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToYAxis(1)} type="down">Down</ControlButton>
+                        </div>
+
+                        <div className={css.guide}>
+                            <div>
+                                x/z: Rotate
+                            </div>
+                            <div>
+                                <i className="bi bi-arrow-left"></i> Left
+                            </div>
+                            <div>
+                                <i className="bi bi-arrow-right"></i> Right
+                            </div>
+                            <div>
+                                <i className="bi bi-arrow-down"></i> Down
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </>
         )
     }
 }
-
 
 export default App;
 

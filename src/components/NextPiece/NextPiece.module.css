@@ -8,9 +8,9 @@
     height: 33px;
     width: 33px;
     text-align: center;
-    border: 1px solid black;
 }
 
 .color {
-    background-color: black;
+    background-color: #000;
+    border: 1px solid var(--border-color);
 }

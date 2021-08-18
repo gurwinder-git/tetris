@@ -30,7 +30,9 @@ class NextPiece extends React.Component {
                             }
 
                             return (
-                                <span key={`${y}_${x}`} className={classes.join(' ')}>{textContent}</span>
+                                <span key={`${y}_${x}`} className={classes.join(' ')}>
+                                    {/* {textContent} */}
+                                </span>
                             )
                         })
                     })

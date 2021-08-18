@@ -1,0 +1,73 @@
+#tetris_container {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    padding: 10px;
+    background-color: black;
+}
+
+.right_div {
+    padding: 10px;
+    background-color: var(--main-color)
+}
+
+.next_piece {
+    margin: 5px 0px;
+    width: 150px;
+    padding: 5px;
+    height: 154px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-color)
+}
+
+.scores {
+    background-color: var(--bg-color);
+    padding: 5px;
+    margin: 6px 0px;
+}
+
+.controls {
+    padding: 13px 0;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-color);
+}
+
+.controls div {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.start_pause {
+    display: flex;
+    flex-direction: column;
+    background-color: border-box;
+    padding: 2px;
+    background-color: var(--bg-color);
+    margin: 15px 0;
+}
+
+.start_pause button {
+    color: white;
+    margin: 5px 0;
+    font-weight: bolder;
+    padding: 0px 0px 4px 0px;
+    font-size: 16px;
+    background: var(--main-color);
+    cursor: pointer;
+}
+
+.guide {
+    font-size: xx-small;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-row-gap: 2px;
+}

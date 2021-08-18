@@ -5,6 +5,8 @@
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   font-family: 'DotGothic16', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: bolder;
+  color: var(--font-color);
 }
 
 #root {
@@ -15,11 +17,8 @@
 }
 
 :root {
-  --bg-color: rgb(187, 134, 19);
-  --border-left-color: rgba(255, 255, 255, 0.20);
-  --border-top-color: rgba(255, 255, 255, 0.33);
-  --border-right-color: rgb(0 0 0 / 30%);
-  --border-bottom-color: rgb(0 0 0 / 50%);
+  --font-color: rgb(228, 228, 228);
+  --border-color: #0c0c0c;
   --color-0: #808080;
   --color-1: #ff6600;
   --color-2: #eec900;
@@ -28,10 +27,8 @@
   --color-5: #00ff00;
   --color-6: #66ccff;
   --color-7: #ff0000;
-  --button-color-t: rgb(255 255 255);
-  --button-color-r: rgba(150, 150, 150, 1);
-  --button-color-b: rgba(120, 120, 120, 1);
-  --button-color-l: rgba(222, 222, 222, 1);
+  --main-color: rgb(24, 24, 24);
+  --bg-color: rgb(121 121 121);
   --cols: 10;
   --rows: 18;
   --tile-size: 33px;

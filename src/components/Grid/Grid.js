@@ -49,7 +49,8 @@ function Grid({ grid, piece }) {
                         return (
                             <span key={`${y}_${x}`} className={classes.join(' ')}>
                                 {
-                                    textContent
+                                    // textContent
+
                                     // piece ?
                                     //     piece.mergeData.indexOf(y + '_' + x) !== -1 ? '1' : grid[y][x] :
                                     //     grid[y][x]

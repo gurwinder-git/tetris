@@ -1,0 +1,11 @@
+.start_button {
+    font-size: medium;
+    font-weight: bolder;
+    padding: 5px 20px;
+    margin-top: 30px;
+    outline: none;
+    border: none;
+    background-color: cornflowerblue;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
