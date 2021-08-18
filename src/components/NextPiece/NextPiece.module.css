@@ -1,0 +1,16 @@
+.nextPieceGrid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.nextPieceGrid span {
+    height: 33px;
+    width: 33px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.color {
+    background-color: black;
+}

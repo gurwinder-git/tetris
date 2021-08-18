@@ -20,6 +20,10 @@
     color: ''
 }
 
+.projection {
+    background-color: #c2c2c2;
+}
+
 .color {
     background: #000;
     color: white

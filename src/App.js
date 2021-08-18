@@ -3,6 +3,8 @@ import './App.css'
 
 //componets
 import Grid from './components/Grid/Grid'
+import NextPiece from './components/NextPiece/NextPiece'
+import StartGame from './components/StartGame/StartGame'
 
 //pices
 import { pieceCollection } from './pieceCollection/pieceCollection'
@@ -18,13 +20,18 @@ class App extends Component {
             gridWidth: 10,
             piece: null,
             clearLines: 0,
-            level: 1
+            nextPieceIndex: null,
+            gameRunning: false
         }
         // this.buildGrid.bind(this)
     }
 
+    generateNextPieceIndex = () => {
+        return Math.trunc(Math.random() * 7) + 1
+    }
+
     initGame = () => {
-        this.setState({ grid: this.buildGrid() }, () => {
+        this.setState({ grid: this.buildGrid(), nextPieceIndex: this.generateNextPieceIndex() }, () => {
             this.generatePiece()
             this.setTimer()
         })
@@ -35,20 +42,17 @@ class App extends Component {
             if (this.state.piece) {
                 this.pieceMoveToYAxis(1)
             }
-        }, this.levelToTime(this.state.level))
+        }, this.levelToTime())
     }
 
-    levelToTime = (level) => {
-        switch (level) {
-            case 1:
-                return 1000
+    levelToTime = () => {
+        const clearLines = this.state.clearLines
 
-            case 2:
-                return 500
-
-            default:
-                return 500
-        }
+        if (clearLines >= 0 && clearLines <= 3) return 1000
+        else if (clearLines >= 4 && clearLines <= 6) return 800
+        else if (clearLines >= 7 && clearLines <= 9) return 500
+        else if (clearLines >= 10 && clearLines <= 14) return 400
+        else return 400
     }
 
     componentDidMount() {
@@ -117,9 +121,20 @@ class App extends Component {
         const piece = {}
         piece.posY = 0
         piece.posX = 0
-        piece.grid = pieceCollection[Math.trunc(Math.random() * 7)]
+        piece.grid = pieceCollection[this.state.nextPieceIndex]
         piece.mergeData = []
         piece.color = Math.trunc(Math.random() * 5) + 1
+
+        let firstLineEmpty = true
+        for (let i = 0; i < piece.grid[0].length; i++) {
+            if (piece.grid[0][i] > 0) {
+                firstLineEmpty = false
+            }
+        }
+
+        if (firstLineEmpty) {
+            piece.posY--
+        }
 
         piece.posX = Math.floor((this.state.gridWidth - piece.grid[0].length) / 2)
 
@@ -129,7 +144,7 @@ class App extends Component {
 
         if (coordinates) {
             piece.mergeData = coordinates
-            this.setState({ piece })
+            this.setState({ piece, nextPieceIndex: this.generateNextPieceIndex() })
         } else {
             this.closeGame()
         }
@@ -223,10 +238,8 @@ class App extends Component {
             }
         }, () => {
             this.generatePiece()
-            if (this.state.clearLines > 2) {
-                clearInterval(this.timerID)
-                this.setTimer(this.state.level++)
-            }
+            clearInterval(this.timerID)
+            this.setTimer()
         })
 
     }
@@ -365,7 +378,6 @@ class App extends Component {
                 if (grid[y][x] === 0) {
                     lineCompleted = false
                 }
-
             }
 
             if (lineCompleted === false) {
@@ -391,16 +403,26 @@ class App extends Component {
     }
 
     render() {
+        // console.log(pieceCollection[this.state.nextPieceIndex])
+
         return (
-            <div id="tetris-container">
-                <p>Points: <span>{this.state.clearLines}</span></p>
-                <p>level: <span>{this.state.level}</span></p>
-                {
-                    this.state.grid ? (<Grid
-                        grid={this.state.grid}
-                        piece={this.state.piece} />) : null
-                }
-            </div>
+            <>
+                <StartGame />
+                <div id="tetris-container">
+                    <p>Points: <span>{this.state.clearLines}</span></p>
+
+                    {
+                        this.state.grid ? (<Grid
+                            grid={this.state.grid}
+                            piece={this.state.piece} />) : null
+                    }
+
+                    <p>Next Piece</p>
+                    {
+                        this.state.nextPieceIndex ? <NextPiece grid={pieceCollection[this.state.nextPieceIndex]} /> : ''
+                    }
+                </div>
+            </>
         )
     }
 }
