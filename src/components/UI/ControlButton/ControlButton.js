@@ -2,6 +2,7 @@ import React from 'react'
 import css from './ControlButton.module.css'
 
 function ControlButton(props) {
+    let timer = []
     let icon = '^'
     switch (props.type) {
         case 'up':
@@ -24,7 +25,10 @@ function ControlButton(props) {
             icon = '^'
             break
     }
-    return <button className={css.c_button} onClick={props.clicked} disabled={props.disabled}>{icon}</button>
+    return <button className={css.c_button} onClick={() => {
+        props.clicked()
+    }}
+        disabled={props.disabled}>{icon}</button>
 }
 
 export default ControlButton

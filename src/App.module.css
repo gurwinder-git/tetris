@@ -3,8 +3,9 @@
     grid-template-columns: auto auto;
     flex-direction: row;
     border: 1px solid black;
-    padding: 10px;
+    padding: 10px 10px 1px 10px;
     justify-content: center;
+    margin: 2px 0px;
     background-color: black;
 }
 
@@ -62,6 +63,21 @@
     grid-row-gap: 2px;
 }
 
+.intro {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    /* border: 1px solid; */
+    text-align: center;
+    font-size: 7px;
+    letter-spacing: 1px;
+}
+
+.intro a {
+    color: #354fff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 534px) {
     #tetris_container {
         width: 99%;
@@ -85,6 +101,7 @@
         display: flex;
         align-items: center;
         padding: 0 10px;
+        margin: 1px 0;
         justify-content: center;
     }
     .controls {
@@ -99,7 +116,7 @@
         grid-column-end: 3;
     }
     .controls div button {
-        margin: 0 23px;
+        margin: 0 38px;
     }
     .next_piece {
         margin: 0px 0px;

@@ -12,6 +12,11 @@ import MessagePopUp from './components/UI/MessagePopUp/MessagePopUp'
 import { pieceCollection } from './pieceCollection/pieceCollection'
 
 //music
+import clearLine from './sound/cleraLine.mp3'
+import gameOver from './sound/gameOver.mp3'
+
+const cleanGridSound = new Audio(clearLine)
+const gameOverSound = new Audio(gameOver)
 
 
 
@@ -134,6 +139,7 @@ class App extends Component {
         // console.log('game over')
         clearInterval(this.timerID)
         this.setState({ gameOver: true })
+        gameOverSound.play()
     }
 
     //Get piece
@@ -424,6 +430,7 @@ class App extends Component {
             for (let i = 0; i < width; i++) {
                 line.push(0)
             }
+            cleanGridSound.play()
             return line
         }
 
@@ -539,6 +546,7 @@ class App extends Component {
                                     this.pieceMoveToYAxis(1)
                             }} type="down">Down</ControlButton>
                     </div>
+                    <small className={css.intro}>Programmed by <a href="https://github.com/gurwinder-git" target="_blank">Gurwinder Singh</a></small>
                 </div>
             </>
         )

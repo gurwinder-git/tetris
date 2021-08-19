@@ -15,15 +15,18 @@
   user-select: none;
 }
 
+body {
+  background: darkturquoise;
+}
+
 #root {
   display: flex;
   align-items: center;
   justify-content: center;
   height: -moz-fit-content;
-  height: 100vh;
+  /* height: 100vh; */
   width: -moz-fit-content;
   width: 100%;
-  background: darkturquoise;
 }
 
 :root {
@@ -41,7 +44,7 @@
   --bg-color: #009688;
   --cols: 10;
   --rows: 18;
-  --tile-size: 33px;
+  --tile-size: 25px;
   --tile-size-mobile: 18px;
   --border-width: 1px;
   --btn-color: black;
