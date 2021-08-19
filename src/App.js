@@ -11,6 +11,9 @@ import MessagePopUp from './components/UI/MessagePopUp/MessagePopUp'
 //pices
 import { pieceCollection } from './pieceCollection/pieceCollection'
 
+//music
+
+
 
 class App extends Component {
 
@@ -32,7 +35,7 @@ class App extends Component {
     }
 
     generateNextPieceIndex = () => {
-        return Math.trunc(Math.random() * 7) + 1
+        return Math.trunc(Math.random() * 7)
     }
 
     initGame = () => {
@@ -46,7 +49,6 @@ class App extends Component {
             gameRunning: true,
             paused: false,
             clearLines: 0,
-            paused: false,
             gameOver: false
         }, () => {
             this.generatePiece()
@@ -66,50 +68,49 @@ class App extends Component {
         const clearLines = this.state.clearLines
 
         if (clearLines >= 0 && clearLines <= 3) return 1000
-        else if (clearLines >= 4 && clearLines <= 6) return 800
-        else if (clearLines >= 7 && clearLines <= 9) return 500
-        else if (clearLines >= 10 && clearLines <= 14) return 400
-        else return 400
+        else if (clearLines >= 4 && clearLines <= 6) return 900
+        else if (clearLines >= 7 && clearLines <= 9) return 800
+        else if (clearLines >= 10 && clearLines <= 14) return 700
+        else return 700
     }
 
     componentDidMount() {
+        let score = JSON.parse(localStorage.getItem('highScore'))
 
+        if (score) {
+            this.setState({ heighScore: score })
+        } else {
+            this.setState({ heighScore: score })
+        }
         document.addEventListener('keydown', (event) => {
             if (!this.state.paused) {
                 // console.log(event.keyCode)
-                switch (event.keyCode) {
-                    case 39:
-                        if (this.state.piece) {
+                if (this.state.piece) {
+                    switch (event.keyCode) {
+                        case 39:
                             this.pieceMoveToXAxis(1)
-                        }
-                        break;
+                            break;
 
-                    case 37:
-                        if (this.state.piece) {
+                        case 37:
                             this.pieceMoveToXAxis(-1)
-                        }
-                        break;
+                            break;
 
-                    case 40:
-                        if (this.state.piece) {
+                        case 40:
                             this.pieceMoveToYAxis(1)
-                        }
-                        break;
+                            break;
 
-                    case 88:
-                        if (this.state.piece) {
+                        case 88:
                             this.rotatePiece('right')
-                        }
-                        break;
 
-                    case 90:
-                        if (this.state.piece) {
+                            break;
+
+                        case 90:
                             this.rotatePiece('left')
-                        }
-                        break;
+                            break;
 
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
                 }
             }
         })
@@ -250,10 +251,18 @@ class App extends Component {
 
 
         this.setState((pre) => {
+            let totalScores = pre.clearLines + clearLines
+            let totalScoresInlocalStorage = JSON.parse(localStorage.getItem('highScore'))
+
+            if (totalScores > totalScoresInlocalStorage) {
+                JSON.stringify(localStorage.setItem('highScore', totalScores))
+            }
+
             return {
                 grid: cleanGrid,
                 piece: null,
-                clearLines: pre.clearLines + clearLines
+                clearLines: totalScores,
+                heighScore: JSON.parse(localStorage.getItem('highScore'))
             }
         }, () => {
             this.generatePiece()
@@ -438,7 +447,7 @@ class App extends Component {
     }
 
     restartGame = () => {
-        if (window.confirm('Are you sure')) {
+        if (window.confirm('Are you sure?')) {
             clearInterval(this.timerID)
             this.initGame()
         }
@@ -469,9 +478,10 @@ class App extends Component {
                         <div className={css.next_piece}>
                             <p>Next Piece</p>
                             {
-                                this.state.nextPieceIndex ? <NextPiece grid={pieceCollection[this.state.nextPieceIndex]} /> : ''
+                                this.state.nextPieceIndex !== null ? <NextPiece grid={pieceCollection[this.state.nextPieceIndex]} /> : ''
                             }
                         </div>
+
                         <div className={css.scores}>
                             <p>Clear Lines: <span>{this.state.clearLines}</span></p>
                         </div>
@@ -483,15 +493,6 @@ class App extends Component {
                         <div className={css.start_pause}>
                             <button onClick={this.restartGame}>Restart</button>
                             <button onClick={this.pauseGame}>Pause</button>
-                        </div>
-
-                        <div className={css.controls}>
-                            <ControlButton disabled={this.state.paused} clicked={() => this.rotatePiece('left')} type="up">up</ControlButton>
-                            <div>
-                                <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToXAxis(-1)} type="left">left</ControlButton>
-                                <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToXAxis(1)} type="right">Right</ControlButton>
-                            </div>
-                            <ControlButton disabled={this.state.paused} clicked={() => this.pieceMoveToYAxis(1)} type="down">Down</ControlButton>
                         </div>
 
                         <div className={css.guide}>
@@ -510,6 +511,34 @@ class App extends Component {
                         </div>
                     </div>
 
+
+                    <div className={css.controls}>
+                        <ControlButton disabled={this.state.paused}
+                            clicked={() => {
+                                if (this.state.piece)
+                                    this.rotatePiece('left')
+                            }} type="up">up</ControlButton>
+
+                        <div>
+                            <ControlButton disabled={this.state.paused}
+                                clicked={() => {
+                                    if (this.state.piece)
+                                        this.pieceMoveToXAxis(-1)
+                                }} type="left">left</ControlButton>
+
+                            <ControlButton disabled={this.state.paused}
+                                clicked={() => {
+                                    if (this.state.piece)
+                                        this.pieceMoveToXAxis(1)
+                                }} type="right">Right</ControlButton>
+                        </div>
+
+                        <ControlButton disabled={this.state.paused}
+                            clicked={() => {
+                                if (this.state.piece)
+                                    this.pieceMoveToYAxis(1)
+                            }} type="down">Down</ControlButton>
+                    </div>
                 </div>
             </>
         )

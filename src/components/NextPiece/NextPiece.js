@@ -14,7 +14,7 @@ class NextPiece extends React.Component {
     render() {
         const grid = this.props.grid
         return (
-            <div className={css.nextPieceGrid} style={{ width: grid.length * 33 + 'px', height: grid.length * 33 + 'px' }}>
+            <div className={css.nextPieceGrid}>
                 {
                     grid.map((line, y) => {
 

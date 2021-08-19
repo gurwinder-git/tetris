@@ -2,6 +2,7 @@
     position: absolute;
     top: calc(100vh - 66%);
     left: 0px;
+    font-size: xx-large;
     width: 100%;
     display: flex;
     background-color: #000000e6;
@@ -9,4 +10,5 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 2;
 }

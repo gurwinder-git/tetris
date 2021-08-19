@@ -2,17 +2,17 @@
     display: grid;
     grid-template-columns: repeat(var(--cols), var(--tile-size));
     margin-right: 8px;
-    background-color: var(--main-color);
-    width: 330px;
-    border: 1px solid black;
+    background-color: var(--bg-color);
+    width: calc(var(--cols) * var(--tile-size));
+    height: calc(var(--rows) * var(--tile-size));
+    /* border: 1px solid black; */
 }
 
 #grid span {
-    height: var(--tile-size);
-    width: var(--tile-size);
+    height: 100%;
+    width: 100%;
     text-align: center;
-    /* border-bottom: 1px solid rgb(247, 239, 239); */
-    /* border-left: 1px solid rgb(247, 239, 239); */
+    border: 1px solid rgb(247 239 239 / 15%);
 }
 
 .first {
@@ -20,12 +20,19 @@
 }
 
 .projection {
-    background-color: #292929;
-    border: 1px solid #171717;
+    background-color: #00000026;
 }
 
 .color {
     background: #000;
     color: white;
-    border: 1px solid var(--border-color);
+}
+
+@media only screen and (max-width: 534px) {
+    #grid {
+        margin: 0 auto;
+        grid-template-columns: repeat(var(--cols), var(--tile-size-mobile));
+        width: calc(var(--cols) * var(--tile-size-mobile));
+        height: calc(var(--rows) * var(--tile-size-mobile));
+    }
 }

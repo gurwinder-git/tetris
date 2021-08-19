@@ -7,17 +7,27 @@
   font-family: 'DotGothic16', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-weight: bolder;
   color: var(--font-color);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #root {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: -moz-fit-content;
   height: 100vh;
+  width: -moz-fit-content;
+  width: 100%;
+  background: darkturquoise;
 }
 
 :root {
-  --font-color: rgb(228, 228, 228);
+  --font-color: rgb(255, 255, 255);
   --border-color: #0c0c0c;
   --color-0: #808080;
   --color-1: #ff6600;
@@ -27,10 +37,28 @@
   --color-5: #00ff00;
   --color-6: #66ccff;
   --color-7: #ff0000;
-  --main-color: rgb(24, 24, 24);
-  --bg-color: rgb(121 121 121);
+  --main-color: rgb(41 41 41);
+  --bg-color: #009688;
   --cols: 10;
   --rows: 18;
   --tile-size: 33px;
+  --tile-size-mobile: 18px;
   --border-width: 1px;
+  --btn-color: black;
+}
+
+::-moz-selection {
+  color: none;
+  background: none;
+}
+
+::selection {
+  color: none;
+  background: none;
+}
+
+@media only screen and (max-width: 534px) {
+  p {
+    font-size: .8rem;
+  }
 }

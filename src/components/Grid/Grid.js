@@ -73,12 +73,10 @@ function getProjectionCoordinates(grid, piece) {
         coordinates = []
         for (let y = 0; y < piece.grid.length; y++) { //row
             for (let x = 0; x < piece.grid[0].length; x++) { //col
-
                 // console.log(piece.grid[0].length) //  3 3 3 3 3 3
-
                 if (piece.grid[y][x] > 0) {
 
-                    if (virtualY <= 0) return false
+                    if (virtualY < -1) return false
 
                     if (grid[y + virtualY] === undefined) {
                         return previousCoordinates

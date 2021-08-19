@@ -1,16 +1,31 @@
 .nextPieceGrid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    margin: 13px 0;
+    grid-template-columns: repeat(4, var(--tile-size));
+    width: calc(4 * var(--tile-size));
+    height: calc(4 * var(--tile-size));
 }
 
 .nextPieceGrid span {
-    height: 33px;
-    width: 33px;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    border: 1px solid rgb(247 239 239 / 15%);
     text-align: center;
 }
 
 .color {
     background-color: #000;
     border: 1px solid var(--border-color);
+}
+
+@media only screen and (max-width: 534px) {
+    .nextPieceGrid {
+        grid-template-columns: repeat(4, var(--tile-size-mobile));
+        width: calc(4 * var(--tile-size-mobile));
+        height: calc(4 * var(--tile-size-mobile));
+    }
+    .nextPieceGrid span {
+        width: var(--tile-size-mobile);
+        height: var(--tile-size-mobile);
+    }
 }

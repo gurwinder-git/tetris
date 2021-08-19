@@ -1,49 +1,39 @@
 #tetris_container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
     flex-direction: row;
     border: 1px solid black;
     padding: 10px;
+    justify-content: center;
     background-color: black;
 }
 
 .right_div {
-    padding: 10px;
-    background-color: var(--main-color)
+    padding: 20px 10px;
+    height: fit-content;
+    background-color: var(--main-color);
 }
 
 .next_piece {
     margin: 5px 0px;
     width: 150px;
     padding: 5px;
-    height: 154px;
+    /* height: 154px; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--bg-color)
+    background-color: var(--bg-color);
 }
 
 .scores {
-    background-color: var(--bg-color);
-    padding: 5px;
+    padding: 5px 12px;
     margin: 6px 0px;
+    border: 1px solid #c5c5c561;
 }
 
 .controls {
-    padding: 13px 0;
-    margin: 16px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: var(--bg-color);
-}
-
-.controls div {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    display: none;
 }
 
 .start_pause {
@@ -51,8 +41,8 @@
     flex-direction: column;
     background-color: border-box;
     padding: 2px;
-    background-color: var(--bg-color);
-    margin: 15px 0;
+    /* background-color: var(--bg-color); */
+    margin: 2px 0;
 }
 
 .start_pause button {
@@ -60,7 +50,7 @@
     margin: 5px 0;
     font-weight: bolder;
     padding: 0px 0px 4px 0px;
-    font-size: 16px;
+    font-size: .9em;
     background: var(--main-color);
     cursor: pointer;
 }
@@ -70,4 +60,49 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-row-gap: 2px;
+}
+
+@media only screen and (max-width: 534px) {
+    #tetris_container {
+        width: 99%;
+        height: -moz-fit-content;
+        height: fit-content;
+        grid-column-gap: 6px;
+        grid-row-gap: 6px;
+    }
+    .right_div {
+        padding: 4px 8px;
+        /* display: none; */
+    }
+    .next_piece {
+        width: 115px;
+    }
+    .guide {
+        display: none;
+    }
+    .controls div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        justify-content: center;
+    }
+    .controls {
+        padding: 13px 0;
+        /* margin: 2px 0; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: var(--bg-color);
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+    .controls div button {
+        margin: 0 23px;
+    }
+    .next_piece {
+        margin: 0px 0px;
+        padding: 0px;
+    }
 }
