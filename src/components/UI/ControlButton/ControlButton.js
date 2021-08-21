@@ -2,7 +2,6 @@ import React from 'react'
 import css from './ControlButton.module.css'
 
 function ControlButton(props) {
-    let timer = []
     let icon = '^'
     switch (props.type) {
         case 'up':
